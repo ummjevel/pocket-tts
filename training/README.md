@@ -168,28 +168,7 @@ If you train on 2k hours of HiFiTTS-2 and batch size 64, this is the metrics pro
 
 See [Evaluate](#Evaluate) for more info about the metrics.
 
-Regarding timing: the first run precomputes Mimi latents for the train
-manifest (once, using all GPUs; validation always encodes audio directly),
-then trains from them. On 2000 h of HiFiTTS-2, effective batch size 64:
-
-| GPUs | per-GPU batch | precompute (once) | steps/s | peak VRAM/GPU | to 200k | to 400k |
-|---|---|---|---|---|---|---|
-| 1 x H100-80GB | 64 | ~50 min | 6.3 | 54 GiB | ~8.8 h | ~17.5 h |
-| 2 x H100-80GB | 32 | ~25 min | 8.1 | 30 GiB | ~6.8 h | ~13.7 h |
-| 4 x H100-80GB | 16 | ~15 min | 9.8 | 18 GiB | ~5.7 h | ~11.3 h |
-| 8 x H100-80GB | 8 | ~10 min | 10.4 | 12 GiB | ~5.3 h | ~10.7 h |
-
-Precompute stores ~6 GB of latents per 1000 h of audio next to the manifest.
-`data.precompute: false` skips the precomputing, which will start training
-immediately but at slower speeds.
-
-And for the distillation step (`depth_distill.yaml`), here is the speed you
-can expect:
-
-| GPUs | per-GPU batch | steps/s | peak VRAM/GPU | 200k steps |
-|---|---|---|---|---|
-| 1 x H100 | 64 | 10.5 | 9.8 GiB | ~5.3 h |
-| 8 x H100 | 8 | 21.3 | 3.8 GiB | ~2.6 h |
+Runtime and memory depend on the local profile. Benchmark the target device; see KOREAN_COMPRESSION.md.
 
 ### Faster distillation from a teacher cache
 
@@ -210,7 +189,7 @@ done; wait
 The script draws the rows with the training loader and the config's data settings (crops,
 voice prompts, text augmentations) and stores each one with the teacher's guided target. The
 run then needs neither the teacher, nor the loader, nor Mimi: distilling the released 24-layer
-English teacher into 6 layers at batch size 64 on one H100 ran at 27.5 steps/s from a cache vs
+English teacher into 6 layers at batch size 64 on one reference accelerator ran at 27.5 steps/s from a cache vs
 8.4 steps/s online (3.3x), with the same loss curve (distill_mse 0.0975 vs 0.0983 over steps
 600-800 of an 800-step run) and 7.4 vs 8.9 GiB peak memory. The cached targets match the online
 teacher's to a relative MSE of 2e-4 (they are stored in bf16).
@@ -219,7 +198,7 @@ What to know before using it:
 - Disk: the target takes 2 bytes per frame per backbone channel, 2 KB per 80 ms frame for the
   English models (d_model 1024): ~200 KB per HiFiTTS-2 row, ~200 GB per million rows. Size
   `--rows` to what the run reads, `max_steps x batch_size x grad_accum_steps x GPUs`.
-- Building costs about the teacher's share of an online run (51k rows took 2 min on one H100
+- Building costs about the teacher's share of an online run (51k rows took 2 min on one reference accelerator
   with 4 parts), so the cache pays off when several runs read it: a sweep over student settings,
   replicates, restarts.
 - The cache fixes the data: which rows, their crops and prompts, and their order are drawn once at

@@ -1,0 +1,17 @@
+{
+  "backbone_dir": "runs/backbone",
+  "followup_dir": "runs/followup",
+  "assets_dir": ".local/artifacts",
+  "evaluation_data": ".local/artifacts/cv3.parquet",
+  "metrics_dir": ".local/metrics",
+  "train_manifest": ".local/data/train_aligned.jsonl",
+  "valid_manifest": ".local/data/valid_aligned.jsonl",
+  "device": "cuda:0",
+  "memory_fraction": 0.85,
+  "threads": 4,
+  "loader_procs": 1,
+  "microbatch": 2,
+  "accumulation": 32,
+  "require_slurm": false,
+  "allowed_gpu_uuids": []
+}

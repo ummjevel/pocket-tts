@@ -1,0 +1,41 @@
+{
+  "protocol": "CV3 Korean500 / UTMOSv1 / Whisper-large-v3 / CFG1",
+  "results": [
+    {
+      "model": "control_s00006000",
+      "num_items": 500,
+      "utmos": 3.1411228041648864,
+      "cer": 0.05539653881720904,
+      "silent": 0,
+      "no_eos": 0,
+      "speaker_similarity": 0.9307476114034653
+    },
+    {
+      "model": "width768_s00002000",
+      "num_items": 500,
+      "utmos": 3.2348547978401183,
+      "cer": 0.08899555242414901,
+      "silent": 0,
+      "no_eos": 1,
+      "speaker_similarity": 0.9139585275650024
+    },
+    {
+      "model": "width768_s00006000",
+      "num_items": 500,
+      "utmos": 3.191213367700577,
+      "cer": 0.06935576203267427,
+      "silent": 0,
+      "no_eos": 1,
+      "speaker_similarity": 0.9249674972295762
+    },
+    {
+      "model": "width768_s00010000",
+      "num_items": 500,
+      "utmos": 3.1697011048793793,
+      "cer": 0.061693601655731206,
+      "silent": 0,
+      "no_eos": 0,
+      "speaker_similarity": 0.927599626660347
+    }
+  ]
+}

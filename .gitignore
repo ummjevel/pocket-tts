@@ -97,3 +97,14 @@ italk.yaml
 .venv-train/
 /data*/
 runs/
+
+# Korean compression: local-only environment and artifacts
+/.local/
+/runs/
+/data/
+*.pt
+*.safetensors
+*.parquet
+*.wav
+*.mp3
+*.tar.gz

@@ -1,0 +1,47 @@
+data:
+  train_jsonl: ${TRAIN_MANIFEST}
+  valid_jsonl: ${VALID_MANIFEST}
+  max_duration_sec: 30.0
+  max_voice_prompt_sec: 5.0
+  shuffle: true
+  precompute: false
+  loader_procs: 3
+  num_bucket_batches: 1
+  prompt_trim_max_sec: 0.0
+  final_punct_dropout: 0.0
+flow:
+  type: drifting
+  kwargs: {}
+optim:
+  lr: 0.0004
+  schedule: cosine
+  warmup_steps: 1000
+model_config: ${FOLLOWUP}/head224_model.yaml
+start_from_pretrained: false
+distill_cfg_coef: 0.0
+reset_text_embedding: false
+run_dir: ${FOLLOWUP}/head224
+batch_size: 32
+grad_accum_steps: 2
+max_steps: 10000
+seed: 42
+compile: false
+text_dropout: 0.0
+voice_dropout: 0.0
+stats_ema_steps: 0
+ema_decay: 0.999
+ckpt_freq: 2000
+num_ckpt_keep: 11
+log_freq: 50
+valid_freq: 2500
+num_valid_batches: 10
+sample_freq: 0
+distill_teacher_config: ''
+distill_teacher_weights: ''
+distill_teacher_use_ema: false
+student_init_from: ''
+head_distill: true
+head_distill_from: ${FOLLOWUP}/width224/checkpoint_00020000.pt
+head_distill_loss: mse
+head_distill_samples: 1
+head_distill_temp: 1.0

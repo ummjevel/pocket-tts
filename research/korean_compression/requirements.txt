@@ -1,0 +1,4 @@
+# Install the upstream training/dev dependencies first. This additional package
+# reads the pinned Korean evaluation parquet. Match the tested version when
+# reproducing recorded scores; updating dependencies is a separate experiment.
+pyarrow==25.0.0
